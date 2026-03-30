@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+
+<title>Studio 5D Attendance System</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --neon:#00f7ff;
+  --violet:#4f46e5;
+}
+
+*{ box-sizing:border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(1200px 600px at 50% -10%, #0b1220, #020617);
+  margin:0;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:16px;
+}
+
+.form-container {
+  width:100%;
+  max-width:420px;
+  padding:20px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 0 40px rgba(0,247,255,.2);
+  border:1px solid rgba(255,255,255,0.1);
+}
+
+/* HEADER */
+h2{
+  text-align:center;
+  font-family:'Poppins', sans-serif;
+  font-weight:600;
+  font-size:20px;
+  margin-bottom:10px;
+}
+h2 span{ color:var(--neon); }
+
+.clock{
+  text-align:center;
+  font-size:12px;
+  color:#94a3b8;
+  margin-bottom:10px;
+}
+
+/* INFORMATION BOX */
+.info-box{
+  background: rgba(0,0,0,0.35);
+  padding:12px;
+  border-radius:12px;
+  font-size:13px;
+  color:#cbd5f5;
+  margin-bottom:12px;
+  line-height:1.4;
+}
+
+/* LABELS */
+label{
+  display:block;
+  margin-top:12px;
+  font-size:13px;
+  color:#cbd5f5;
+}
+
+/* INPUTS */
+input, select{
+  width:100%;
+  padding:14px;
+  margin-top:6px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(0,0,0,.5);
+  color:#fff;
+  font-size:16px;
+  outline:none;
+}
+input:focus, select:focus{
+  box-shadow:0 0 10px var(--neon);
+}
+
+/* SELECT */
+select{ appearance:none; }
+
+/* BUTTON */
+button{
+  width:100%;
+  padding:16px;
+  margin-top:18px;
+  border-radius:12px;
+  border:none;
+  font-weight:600;
+  font-size:16px;
+  background:linear-gradient(135deg, var(--neon), var(--violet));
+  color:#0f172a;
+  cursor:pointer;
+  transition:0.2s ease;
+}
+button:active{ transform:scale(0.97); }
+
+/* FINGERPRINT */
+.fingerprint{
+  margin:16px auto 6px;
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.05);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.fingerprint svg{
+  width:60px;
+  filter: drop-shadow(0 0 5px var(--neon));
+}
+
+.status{
+  text-align:center;
+  font-size:12px;
+  color:#a5b4fc;
+  min-height:16px;
+}
+
+/* SUCCESS SCREEN */
+.success-screen{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.95);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+/* MOBILE ADJUSTMENTS */
+@media (max-width: 480px){
+  .form-container{ padding:16px; border-radius:14px; }
+  h2{ font-size:18px; }
+  input, select{ padding:13px; font-size:15px; }
+  button{ padding:14px; font-size:15px; }
+  .info-box{ font-size:12px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="form-container">
+
+  <h2><span>Studio 5D</span> Check-In/Out System</h2>
+
+  <!-- INFO SECTION -->
+  <div class="info-box">
+    <strong>Important Information:</strong><br>
+     Late coming: Less than 1hr = N1,000, 1hr+ = N2,000, 3hrs+ = Absent<br>
+     Early closure: Less than 1hr = N1,000, 1hr+ = N2,000, 3hrs+ = Absent<br>
+     Absent: N5,000 deduction<br>
+     Daily attendance is required to calculate salary accurately.
+  </div>
+
+  <div class="clock" id="liveClock"></div>
+
+  <!-- Fingerprint -->
+  <div class="fingerprint" id="finger">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#00f7ff" stroke-width="1.5">
+      <path d="M12 3a6 6 0 0 0-6 6c0 6 6 10 6 12 0-2 6-6 6-12a6 6 0 0 0-6-6z"/>
+      <path d="M9 9a3 3 0 1 1 6 0c0 3-3 5-3 7 0-2-3-4-3-7z"/>
+    </svg>
+  </div>
+
+  <div class="status" id="status">Tap fingerprint to enable</div>
+
+  <!-- FORM -->
+  <form id="form">
+    <label>Employee Name</label>
+    <input type="text" name="name" required>
+
+    <label>Date</label>
+    <input type="date" id="date" name="date" required>
+
+    <label>Select Action</label>
+    <select id="action" name="action">
+      <option value="resumption">Resumption (Check-In)</option>
+      <option value="closing">Closing (Check-Out)</option>
+    </select>
+
+    <label>Confirmation Key</label>
+    <input type="password" name="confirmation_Code" placeholder="Collect code when collecting/dropping shop key" required>
+
+    <label>Time</label>
+    <input type="time" id="time" name="time" required>
+
+    <button type="submit">✔ Submit Attendance</button>
+  </form>
+
+</div>
+
+<script>
+const FORM_ENDPOINT = "https://formspree.io/f/xwvwobpl";
+const beep = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=');
+
+// clock
+document.getElementById('date').valueAsDate = new Date();
+setInterval(()=>{ document.getElementById('liveClock').innerText = new Date().toLocaleString(); },1000);
+
+// auto time
+window.onload = ()=>{ document.getElementById('time').value = new Date().toTimeString().slice(0,5); };
+
+// fingerprint
+let enabled = false;
+document.getElementById('finger').onclick = ()=>{
+  enabled = true;
+  document.getElementById('status').innerText = 'Biometric ready ✔';
+};
+
+// success UI
+function showSuccess(action){
+  const screen = document.createElement('div');
+  screen.className = "success-screen";
+  screen.innerHTML = `
+    <div style="font-size:60px;color:#00f7ff;">✔</div>
+    <h2>${action === 'resumption' ? 'Check-In Successful' : 'Check-Out Successful'}</h2>
+    <p style="color:#94a3b8;">Attendance recorded</p>
+  `;
+  document.body.appendChild(screen);
+  setTimeout(()=> screen.remove(), 2500);
+}
+
+// submit
+const form = document.getElementById('form');
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  if(!enabled){ alert('Tap fingerprint first'); return; }
+  beep.play();
+
+  const formData = new FormData(form);
+  try {
+    const response = await fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: { "Accept": "application/json" },
+      body: formData
+    });
+    if(response.ok){
+      showSuccess(document.getElementById('action').value);
+      form.reset();
+      document.getElementById('date').valueAsDate = new Date();
+    } else { alert("Submission failed ❌"); }
+  } catch (err) { alert("Error submitting form ❌"); }
+});
+</script>
+
+</body>
+</html>
