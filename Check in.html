@@ -453,8 +453,8 @@ function checkQRAccess() {
   const urlParams = new URLSearchParams(window.location.search);
   const qrToken = urlParams.get('qr');
   
-  // Valid QR tokens
-  const validTokens = ['studio5d-attendance', 'checkin', 'attendance-qr'];
+  // Valid QR tokens - including GitHub Pages URL token
+  const validTokens = ['studio5d-attendance', 'checkin', 'attendance-qr', 'github'];
   
   // Require valid QR token - block direct access
   if (!qrToken || !validTokens.includes(qrToken)) {
