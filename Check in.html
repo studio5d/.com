@@ -447,8 +447,8 @@ body {
 </div>
 
 <script>
-// ==================== QR CODE ACCESS CONTROL ====================
-// Check if accessed via QR code scan
+// ==================== QR CODE ACCESS CONTROL (OPTIONAL) ====================
+// QR code enhances security but is not required for access
 function checkQRAccess() {
   const urlParams = new URLSearchParams(window.location.search);
   const qrToken = urlParams.get('qr');
@@ -456,11 +456,12 @@ function checkQRAccess() {
   // Valid QR tokens (you can customize these or generate dynamically)
   const validTokens = ['studio5d-attendance', 'checkin', 'attendance-qr'];
   
-  // If no QR token or invalid token, show access denied
-  if (!qrToken || !validTokens.includes(qrToken)) {
+  // If QR token is present, validate it
+  // If no QR token, allow access (optional QR mode)
+  if (qrToken && !validTokens.includes(qrToken)) {
     return false;
   }
-  return true;
+  return true; // Allow access either with valid QR or without QR
 }
 
 // Show access denied screen
@@ -485,12 +486,12 @@ function showAccessDenied() {
   `;
 }
 
-// Verify QR access on page load
+// Verify QR access on page load - now optional
 if (!checkQRAccess()) {
   showAccessDenied();
 } else {
-  // Continue loading the app if QR access is valid
-  console.log('QR Access Granted');
+  // Continue loading the app
+  console.log('Access Granted' + (new URLSearchParams(window.location.search).get('qr') ? ' via QR' : ''));
 }
 </script>
 
