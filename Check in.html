@@ -448,7 +448,7 @@ body {
 
 <script>
 // ==================== QR CODE ACCESS CONTROL ====================
-// Works with or without QR parameter - optional security
+// Only allows access when QR code is scanned (QR parameter required)
 function checkQRAccess() {
   const urlParams = new URLSearchParams(window.location.search);
   const qrToken = urlParams.get('qr');
@@ -456,8 +456,8 @@ function checkQRAccess() {
   // Valid QR tokens
   const validTokens = ['studio5d-attendance', 'checkin', 'attendance-qr'];
   
-  // Allow access if no QR token, or if QR token is valid
-  if (qrToken && !validTokens.includes(qrToken)) {
+  // Require valid QR token - block direct access
+  if (!qrToken || !validTokens.includes(qrToken)) {
     return false;
   }
   return true;
@@ -485,11 +485,11 @@ function showAccessDenied() {
   `;
 }
 
-// Verify QR access on page load
+// Verify QR access on page load - REQUIRED
 if (!checkQRAccess()) {
   showAccessDenied();
 } else {
-  console.log('Access Granted');
+  console.log('QR Access Granted');
 }
 </script>
 
