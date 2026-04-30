@@ -447,55 +447,6 @@ body {
 </div>
 
 <script>
-// ==================== QR CODE ACCESS CONTROL (OPTIONAL) ====================
-// QR code enhances security but is not required for access
-function checkQRAccess() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const qrToken = urlParams.get('qr');
-  
-  // Valid QR tokens (you can customize these or generate dynamically)
-  const validTokens = ['studio5d-attendance', 'checkin', 'attendance-qr'];
-  
-  // If QR token is present, validate it
-  // If no QR token, allow access (optional QR mode)
-  if (qrToken && !validTokens.includes(qrToken)) {
-    return false;
-  }
-  return true; // Allow access either with valid QR or without QR
-}
-
-// Show access denied screen
-function showAccessDenied() {
-  document.body.innerHTML = `
-    <div style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(180deg,#0a0e17,#0d1321);padding:20px;text-align:center;">
-      <div style="width:120px;height:120px;background:rgba(239,68,68,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
-        <svg width="60" height="60" fill="#ef4444" viewBox="0 0 24 24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-        </svg>
-      </div>
-      <h1 style="font-family:'Poppins',sans-serif;font-size:24px;color:#ef4444;margin-bottom:12px;">Link Expired</h1>
-      <p style="color:#94a3b8;font-size:14px;max-width:300px;line-height:1.6;">
-        This attendance page can only be accessed by scanning the official Studio 5D QR code. 
-        <br><br>
-        Please contact your supervisor for the valid QR code to access this system.
-      </p>
-      <div style="margin-top:24px;padding:16px;background:rgba(255,255,255,0.05);border-radius:12px;">
-        <p style="font-size:12px;color:#64748b;">Access Attempt: ${new Date().toLocaleString()}</p>
-      </div>
-    </div>
-  `;
-}
-
-// Verify QR access on page load - now optional
-if (!checkQRAccess()) {
-  showAccessDenied();
-} else {
-  // Continue loading the app
-  console.log('Access Granted' + (new URLSearchParams(window.location.search).get('qr') ? ' via QR' : ''));
-}
-</script>
-
-<script>
 // ==================== CONFIGURATION ====================
 const FORM_ENDPOINT = "https://formspree.io/f/xwvwobpl";
 const CODE_GENERATION_TIMES = ["07:00", "20:00"]; // 7 AM and 8 PM
