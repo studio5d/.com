@@ -6,263 +6,654 @@
 
 <title>Studio 5D Attendance System</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --neon:#00f7ff;
-  --violet:#4f46e5;
+  --neon-glow:#00f7ff;
+  --violet:#6366f1;
+  --violet-dark:#4f46e5;
+  --bg-dark:#0a0e17;
+  --bg-card:#0d1321;
+  --text-primary:#f1f5f9;
+  --text-secondary:#94a3b8;
+  --text-muted:#64748b;
+  --success:#10b981;
+  --warning:#f59e0b;
+  --error:#ef4444;
+  --border:#1e293b;
 }
 
-*{ box-sizing:border-box; }
+* { box-sizing:border-box; margin:0; padding:0; }
 
 body {
   font-family: 'Inter', sans-serif;
-  background: radial-gradient(1200px 600px at 50% -10%, #0b1220, #020617);
-  margin:0;
-  color:#fff;
+  background: 
+    radial-gradient(ellipse at 20% 0%, rgba(99,102,241,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(0,247,255,0.1) 0%, transparent 50%),
+    linear-gradient(180deg, #0a0e17 0%, #0d1321 50%, #0a0e17 100%);
+  min-height:100vh;
+  color:var(--text-primary);
+  padding:20px;
   display:flex;
   justify-content:center;
   align-items:flex-start;
-  min-height:100vh;
-  padding:16px;
 }
 
-.form-container {
+/* MAIN CONTAINER */
+.container {
   width:100%;
-  max-width:420px;
-  padding:20px;
-  border-radius:18px;
-  background:rgba(255,255,255,0.05);
-  backdrop-filter: blur(18px);
-  box-shadow: 0 0 40px rgba(0,247,255,.2);
-  border:1px solid rgba(255,255,255,0.1);
+  max-width:440px;
+  position:relative;
 }
 
 /* HEADER */
-h2{
+.header {
   text-align:center;
+  margin-bottom:24px;
+}
+
+.logo {
+  width:80px;
+  height:80px;
+  margin:0 auto 12px;
+  background:linear-gradient(135deg, var(--violet), var(--neon));
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow: 0 0 30px rgba(99,102,241,0.4);
+}
+
+.logo svg {
+  width:44px;
+  height:44px;
+  fill:#fff;
+}
+
+.header h1 {
   font-family:'Poppins', sans-serif;
-  font-weight:600;
-  font-size:20px;
-  margin-bottom:10px;
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:-0.5px;
 }
-h2 span{ color:var(--neon); }
 
-.clock{
+.header h1 span {
+  background:linear-gradient(90deg, var(--neon), var(--violet));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.header .tagline {
+  font-size:13px;
+  color:var(--text-muted);
+  margin-top:4px;
+}
+
+/* CLOCK CARD */
+.clock-card {
+  background:linear-gradient(135deg, rgba(99,102,241,0.1), rgba(0,247,255,0.05));
+  border:1px solid rgba(99,102,241,0.2);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:20px;
   text-align:center;
-  font-size:12px;
-  color:#94a3b8;
-  margin-bottom:10px;
 }
 
-/* INFORMATION BOX */
-.info-box{
-  background: rgba(0,0,0,0.35);
-  padding:12px;
-  border-radius:12px;
-  font-size:13px;
-  color:#cbd5f5;
+.current-time {
+  font-size:32px;
+  font-weight:700;
+  font-family:'Poppins', sans-serif;
+  color:var(--neon);
+  text-shadow: 0 0 20px rgba(0,247,255,0.5);
+}
+
+.current-date {
+  font-size:14px;
+  color:var(--text-secondary);
+  margin-top:4px;
+}
+
+/* CODE GENERATION PANEL */
+.code-panel {
+  background:linear-gradient(135deg, rgba(16,185,129,0.1), rgba(0,247,255,0.05));
+  border:1px solid rgba(16,185,129,0.2);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:20px;
+}
+
+.code-panel h3 {
+  font-size:14px;
+  color:var(--text-secondary);
   margin-bottom:12px;
-  line-height:1.4;
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
 
-/* LABELS */
-label{
-  display:block;
+.code-panel h3 svg {
+  width:18px;
+  height:18px;
+  fill:var(--success);
+}
+
+.daily-code {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(0,0,0,0.3);
+  border-radius:12px;
+  padding:16px;
+}
+
+.code-value {
+  font-size:24px;
+  font-weight:700;
+  font-family:'Poppins', monospace;
+  color:var(--success);
+  letter-spacing:2px;
+}
+
+.code-status {
+  font-size:12px;
+  color:var(--text-muted);
+  margin-top:8px;
+}
+
+.code-status.active {
+  color:var(--success);
+}
+
+.next-code {
+  font-size:12px;
+  color:var(--text-muted);
   margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,0.05);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.next-code svg {
+  width:14px;
+  height:14px;
+  fill:var(--text-muted);
+}
+
+/* INFO CARD */
+.info-card {
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:20px;
+}
+
+.info-card h4 {
   font-size:13px;
-  color:#cbd5f5;
+  color:var(--text-secondary);
+  margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
 
-/* INPUTS */
-input, select{
+.info-card h4 svg {
+  width:16px;
+  height:16px;
+  fill:var(--warning);
+}
+
+.info-card ul {
+  list-style:none;
+  font-size:12px;
+  color:var(--text-muted);
+  line-height:1.8;
+}
+
+.info-card li {
+  display:flex;
+  justify-content:space-between;
+}
+
+.info-card li span:last-child {
+  color:var(--text-secondary);
+}
+
+/* FORM */
+.form-card {
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px;
+  padding:24px;
+  margin-bottom:20px;
+}
+
+.form-group {
+  margin-bottom:18px;
+}
+
+.form-group label {
+  display:block;
+  font-size:13px;
+  font-weight:500;
+  color:var(--text-secondary);
+  margin-bottom:8px;
+}
+
+.form-group input,
+.form-group select {
   width:100%;
-  padding:14px;
-  margin-top:6px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(0,0,0,.5);
-  color:#fff;
-  font-size:16px;
+  padding:14px 16px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(0,0,0,0.4);
+  color:var(--text-primary);
+  font-size:15px;
+  font-family:'Inter', sans-serif;
+  transition:all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
   outline:none;
-}
-input:focus, select:focus{
-  box-shadow:0 0 10px var(--neon);
+  border-color:var(--neon);
+  box-shadow: 0 0 0 3px rgba(0,247,255,0.1);
 }
 
-/* SELECT */
-select{ appearance:none; }
+.form-group select {
+  appearance:none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 16px center;
+  cursor:pointer;
+}
 
-/* BUTTON */
-button{
+.form-group input::placeholder {
+  color:var(--text-muted);
+}
+
+/* SUBMIT BUTTON */
+.submit-btn {
   width:100%;
   padding:16px;
-  margin-top:18px;
   border-radius:12px;
   border:none;
-  font-weight:600;
   font-size:16px;
-  background:linear-gradient(135deg, var(--neon), var(--violet));
-  color:#0f172a;
+  font-weight:600;
+  font-family:'Poppins', sans-serif;
+  background:linear-gradient(135deg, var(--violet), var(--violet-dark));
+  color:#fff;
   cursor:pointer;
-  transition:0.2s ease;
-}
-button:active{ transform:scale(0.97); }
-
-/* FINGERPRINT */
-.fingerprint{
-  margin:16px auto 6px;
-  width:100px;
-  height:100px;
-  border-radius:50%;
-  background:rgba(255,255,255,0.05);
+  transition:all 0.2s ease;
   display:flex;
   align-items:center;
   justify-content:center;
-  cursor:pointer;
-}
-.fingerprint svg{
-  width:60px;
-  filter: drop-shadow(0 0 5px var(--neon));
+  gap:10px;
+  margin-top:8px;
 }
 
-.status{
+.submit-btn:hover {
+  transform:translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99,102,241,0.4);
+}
+
+.submit-btn:active {
+  transform:scale(0.98);
+}
+
+.submit-btn svg {
+  width:20px;
+  height:20px;
+  fill:#fff;
+}
+
+/* FOOTER */
+.footer {
   text-align:center;
   font-size:12px;
-  color:#a5b4fc;
-  min-height:16px;
+  color:var(--text-muted);
+  margin-top:20px;
 }
 
-/* SUCCESS SCREEN */
-.success-screen{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.95);
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
-}
-
-/* MOBILE ADJUSTMENTS */
-@media (max-width: 480px){
-  .form-container{ padding:16px; border-radius:14px; }
-  h2{ font-size:18px; }
-  input, select{ padding:13px; font-size:15px; }
-  button{ padding:14px; font-size:15px; }
-  .info-box{ font-size:12px; }
+/* MOBILE */
+@media (max-width: 480px) {
+  body { padding:16px; }
+  .form-card { padding:20px; }
+  .current-time { font-size:28px; }
+  .code-value { font-size:20px; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="form-container">
+<div class="container">
 
-  <h2><span>Studio 5D</span> Check-In/Out System</h2>
-
-  <!-- INFO SECTION -->
-  <div class="info-box">
-    <strong>Important Information:</strong><br>
-     Late coming: Less than 1hr = N1,000, 1hr+ = N2,000, 3hrs+ = Absent<br>
-     Early closure: Less than 1hr = N1,000, 1hr+ = N2,000, 3hrs+ = Absent<br>
-     Absent: N5,000 deduction<br>
-     Daily attendance is required to calculate salary accurately.
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    </div>
+    <h1>Studio <span>5D</span> Attendance</h1>
+    <p class="tagline">Smart Check-In System</p>
   </div>
 
-  <div class="clock" id="liveClock"></div>
-
-  <!-- Fingerprint -->
-  <div class="fingerprint" id="finger">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#00f7ff" stroke-width="1.5">
-      <path d="M12 3a6 6 0 0 0-6 6c0 6 6 10 6 12 0-2 6-6 6-12a6 6 0 0 0-6-6z"/>
-      <path d="M9 9a3 3 0 1 1 6 0c0 3-3 5-3 7 0-2-3-4-3-7z"/>
-    </svg>
+  <!-- CLOCK -->
+  <div class="clock-card">
+    <div class="current-time" id="liveTime">--:--</div>
+    <div class="current-date" id="liveDate">Loading...</div>
   </div>
 
-  <div class="status" id="status">Tap fingerprint to enable</div>
+  <!-- DAILY CODE PANEL -->
+  <div class="code-panel">
+    <h3>
+      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+      Today's Access Code
+    </h3>
+    <div class="daily-code">
+      <div>
+        <div class="code-value" id="dailyCode">------</div>
+        <div class="code-status" id="codeStatus">Generating code...</div>
+      </div>
+    </div>
+    <div class="next-code">
+      <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+      <span id="nextCodeTime">Next code at 7:00 AM</span>
+    </div>
+  </div>
+
+  <!-- INFO -->
+  <div class="info-card">
+    <h4>
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+      Attendance Policy
+    </h4>
+    <ul>
+      <li><span>Late (&lt;1hr)</span><span>N1,000</span></li>
+      <li><span>Late (1hr+)</span><span>N2,000</span></li>
+      <li><span>Late (3hrs+)</span><span>Absent</span></li>
+      <li><span>Early Close (&lt;1hr)</span><span>N1,000</span></li>
+      <li><span>Early Close (1hr+)</span><span>N2,000</span></li>
+      <li><span>Absent</span><span>N5,000</span></li>
+    </ul>
+  </div>
 
   <!-- FORM -->
-  <form id="form">
-    <label>Employee Name</label>
-    <input type="text" name="name" required>
+  <div class="form-card">
+    <form id="attendanceForm">
+      <div class="form-group">
+        <label>Employee Name <span style="color:var(--error);">*</span></label>
+        <input type="text" name="name" placeholder="Enter your full name" required>
+      </div>
 
-    <label>Date</label>
-    <input type="date" id="date" name="date" required>
+      <div class="form-group">
+        <label>Date <span style="color:var(--error);">*</span></label>
+        <input type="date" id="date" name="date" required>
+      </div>
 
-    <label>Select Action</label>
-    <select id="action" name="action">
-      <option value="resumption">Resumption (Check-In)</option>
-      <option value="closing">Closing (Check-Out)</option>
-    </select>
+      <div class="form-group">
+        <label>Action <span style="color:var(--error);">*</span></label>
+        <select id="action" name="action">
+          <option value="resumption">📥 Check-In (Resumption)</option>
+          <option value="closing">📤 Check-Out (Closing)</option>
+        </select>
+      </div>
 
-    <label>Confirmation Key</label>
-    <input type="password" name="confirmation_Code" placeholder="Collect code when collecting/dropping shop key" required>
+      <div class="form-group">
+        <label>Daily Access Code <span style="color:var(--error);">*</span></label>
+        <input type="text" name="confirmation_Code" placeholder="Enter today's 6-digit code" maxlength="6" required>
+        <small style="color:var(--text-muted);font-size:11px;display:block;margin-top:6px;">
+          💡  Codes change daily at 7:00 AM and 8:00 PM.
+        </small>
+      </div>
 
-    <label>Time</label>
-    <input type="time" id="time" name="time" required>
+      <div class="form-group">
+        <label>Time <span style="color:var(--error);">*</span></label>
+        <input type="time" id="time" name="time" required>
+      </div>
 
-    <button type="submit">✔ Submit Attendance</button>
-  </form>
+      <button type="submit" class="submit-btn">
+        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Submit Attendance
+      </button>
+    </form>
+  </div>
+
+  <div class="footer">
+    Studio 5D Attendance System © 2026
+  </div>
 
 </div>
 
 <script>
+// ==================== CONFIGURATION ====================
 const FORM_ENDPOINT = "https://formspree.io/f/xwvwobpl";
-const beep = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=');
+const CODE_GENERATION_TIMES = ["07:00", "20:00"]; // 7 AM and 8 PM
 
-// clock
-document.getElementById('date').valueAsDate = new Date();
-setInterval(()=>{ document.getElementById('liveClock').innerText = new Date().toLocaleString(); },1000);
-
-// auto time
-window.onload = ()=>{ document.getElementById('time').value = new Date().toTimeString().slice(0,5); };
-
-// fingerprint
-let enabled = false;
-document.getElementById('finger').onclick = ()=>{
-  enabled = true;
-  document.getElementById('status').innerText = 'Biometric ready ✔';
-};
-
-// success UI
-function showSuccess(action){
-  const screen = document.createElement('div');
-  screen.className = "success-screen";
-  screen.innerHTML = `
-    <div style="font-size:60px;color:#00f7ff;">✔</div>
-    <h2>${action === 'resumption' ? 'Check-In Successful' : 'Check-Out Successful'}</h2>
-    <p style="color:#94a3b8;">Attendance recorded</p>
-  `;
-  document.body.appendChild(screen);
-  setTimeout(()=> screen.remove(), 2500);
+// ==================== CLOCK ====================
+function updateClock() {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+  const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  
+  document.getElementById('liveTime').textContent = timeStr;
+  document.getElementById('liveDate').textContent = dateStr;
+  
+  // Auto update time field
+  const timeInput = document.getElementById('time');
+  if (timeInput) {
+    timeInput.value = now.toTimeString().slice(0, 5);
+  }
 }
 
-// submit
-const form = document.getElementById('form');
-form.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  if(!enabled){ alert('Tap fingerprint first'); return; }
-  beep.play();
+setInterval(updateClock, 1000);
+updateClock();
 
+// ==================== DATE AUTO-FILL ====================
+document.getElementById('date').valueAsDate = new Date();
+
+// ==================== DAILY CODE GENERATION ====================
+function generateDailyCode(date) {
+  // Create a deterministic code based on date
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  
+  // Generate code using date components
+  // Format: AAAA-BB (where AAAA is derived from date and BB is day)
+  const base = (year * 31 + month * 12 + day) % 10000;
+  const suffix = String(day).padStart(2, '0');
+  
+  // Create a 6-digit code
+  const code = String(base).padStart(4, '0') + suffix;
+  
+  return code;
+}
+
+function getCurrentCodePeriod() {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const currentTime = hours * 60 + minutes;
+  
+  // Check which period we're in
+  const morningCodeTime = 7 * 60; // 7:00 AM
+  const eveningCodeTime = 20 * 60; // 8:00 PM
+  
+  if (currentTime < morningCodeTime) {
+    // Before 7 AM - use previous day's evening code
+    return { period: 'evening', date: new Date(Date.now() - 24 * 60 * 60 * 1000) };
+  } else if (currentTime < eveningCodeTime) {
+    // Between 7 AM and 8 PM - use today's morning code
+    return { period: 'morning', date: new Date() };
+  } else {
+    // After 8 PM - use today's evening code
+    return { period: 'evening', date: new Date() };
+  }
+}
+
+function updateDailyCode() {
+  const period = getCurrentCodePeriod();
+  const code = generateDailyCode(period.date);
+  
+  document.getElementById('dailyCode').textContent = code;
+  
+  const statusEl = document.getElementById('codeStatus');
+  const nextEl = document.getElementById('nextCodeTime');
+  
+  const now = new Date();
+  const hours = now.getHours();
+  
+  if (hours >= 7 && hours < 20) {
+    statusEl.textContent = 'Active - Morning Code';
+    statusEl.className = 'code-status active';
+    nextEl.textContent = 'Next code at 8:00 PM';
+  } else if (hours >= 20) {
+    statusEl.textContent = 'Active - Evening Code';
+    statusEl.className = 'code-status active';
+    nextEl.textContent = 'Next code at 7:00 AM tomorrow';
+  } else {
+    statusEl.textContent = 'Active - Evening Code';
+    statusEl.className = 'code-status active';
+    nextEl.textContent = 'Next code at 7:00 AM';
+  }
+}
+
+updateDailyCode();
+
+// ==================== FORM SUBMISSION ====================
+const form = document.getElementById('attendanceForm');
+
+// Get unique device ID
+function getDeviceId() {
+  let deviceId = localStorage.getItem('studio5d_device_id');
+  if (!deviceId) {
+    deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('studio5d_device_id', deviceId);
+  }
+  return deviceId;
+}
+
+// Get today's date string
+function getTodayDate() {
+  return new Date().toISOString().split('T')[0];
+}
+
+// Check for duplicate attendance
+function checkDuplicateAttendance(name, action) {
+  const today = getTodayDate();
+  const deviceId = getDeviceId();
+  const storageKey = 'studio5d_attendance_' + today;
+  
+  // Get existing records
+  let records = JSON.parse(localStorage.getItem(storageKey) || '[]');
+  
+  const employeeName = name.trim().toLowerCase();
+  
+  // Check if same name already checked in today
+  if (action === 'resumption') {
+    const alreadyCheckedIn = records.find(r => r.name.toLowerCase() === employeeName && r.action === 'resumption');
+    if (alreadyCheckedIn) {
+      return { valid: false, message: '⚠️ You have already signed in today!' };
+    }
+  }
+  
+  // Check if same name already checked out today
+  if (action === 'closing') {
+    const alreadyCheckedOut = records.find(r => r.name.toLowerCase() === employeeName && r.action === 'closing');
+    if (alreadyCheckedOut) {
+      return { valid: false, message: '⚠️ Already signed out today!' };
+    }
+    
+    // Check if this name has checked in today (must check in first before check out)
+    const checkedIn = records.find(r => r.name.toLowerCase() === employeeName && r.action === 'resumption');
+    if (!checkedIn) {
+      return { valid: false, message: '⚠️ You must Check-In first before Check-Out!' };
+    }
+    
+    // Check if the device that checked in is the same device checking out
+    if (checkedIn && checkedIn.deviceId !== deviceId) {
+      return { valid: false, message: '⚠️ Please use the same device you used to Check-In!' };
+    }
+  }
+  
+  // Check if this device has already done any action today
+  const deviceAction = records.find(r => r.deviceId === deviceId);
+  if (deviceAction) {
+    return { valid: false, message: '⚠️ Your device can only Check in or out once in a day!' };
+  }
+  
+  return { valid: true };
+}
+
+// Save attendance record
+function saveAttendanceRecord(name, action) {
+  const today = getTodayDate();
+  const deviceId = getDeviceId();
+  const storageKey = 'studio5d_attendance_' + today;
+  
+  let records = JSON.parse(localStorage.getItem(storageKey) || '[]');
+  
+  records.push({
+    name: name.trim(),
+    action: action,
+    deviceId: deviceId,
+    timestamp: new Date().toISOString()
+  });
+  
+  localStorage.setItem(storageKey, JSON.stringify(records));
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const name = form.name.value.trim();
+  const action = document.getElementById('action').value;
+  const codeInput = form.confirmation_Code.value.trim();
+  const displayedCode = document.getElementById('dailyCode').textContent;
+  
+  // Validate code
+  if (codeInput !== displayedCode) {
+    alert('❌ Invalid Access Code!\n\nPlease get the correct code at the top.');
+    return;
+  }
+  
+  // Check for duplicate attendance
+  const duplicateCheck = checkDuplicateAttendance(name, action);
+  if (!duplicateCheck.valid) {
+    alert(duplicateCheck.message);
+    return;
+  }
+  
   const formData = new FormData(form);
+  
   try {
     const response = await fetch(FORM_ENDPOINT, {
-      method: "POST",
-      headers: { "Accept": "application/json" },
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
       body: formData
     });
-    if(response.ok){
-      showSuccess(document.getElementById('action').value);
-      form.reset();
-      document.getElementById('date').valueAsDate = new Date();
-    } else { alert("Submission failed ❌"); }
-  } catch (err) { alert("Error submitting form ❌"); }
+    
+    if (response.ok) {
+      const name = form.name.value.trim();
+      const action = document.getElementById('action').value;
+      
+      // Save attendance record locally
+      saveAttendanceRecord(name, action);
+      
+      // Redirect to thank you page with action parameter
+      window.location.href = 'thank-you.html?action=' + action;
+    } else {
+      alert('❌ Submission Failed!\n\nPlease try again.');
+    }
+  } catch (err) {
+    alert('❌ Error Submitting Form!\n\nPlease check your connection and try again.');
+  }
 });
 </script>
 
